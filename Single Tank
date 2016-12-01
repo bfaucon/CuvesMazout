@@ -1,16 +1,10 @@
 /*
-** Example Arduino sketch for SainSmart I2C LCD Screen 16x4
-** based on https://bitbucket.org/celem/sainsmart-i2c-lcd/src/3adf8e0d2443/sainlcdtest.ino
-** by
-** Edward Comer
-** LICENSE: GNU General Public License, version 3 (GPL-3.0)
+** This script is inspired from http://wiki.mchobby.be/index.php?title=HC-SR04 for distance measurment.
 　
-** This example uses F Malpartida's NewLiquidCrystal library. Obtain from:
+** This script uses F Malpartida's NewLiquidCrystal library. Obtain from:
 ** https://bitbucket.org/fmalpartida/new-liquidcrystal 
 　
-** Modified Ã¢â‚¬â€œ Ian Brennan ianbren at hotmail.com 23-10-2012 to support Tutorial posted to Arduino.cc
-　
-** Written for and tested with Arduino 1.0
+** Written for and tested with Arduino Uno 3.0
 **
 ** NOTE: Tested on Arduino Uno whose I2C pins are A4==SDA, A5==SCL
 　
