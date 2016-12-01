@@ -18,8 +18,8 @@
 #define trigPin1 10
 #define echoPin1 9
 
-int maximumRange = 400; // distance1 Maximale acceptée (en cm)
-int minimumRange = 0;   // distance1 Minimale acceptée (en cm)
+int maximumRange = 400; // Maximal distance accepted(en cm)
+int minimumRange = 0;   // Minimal distance accepted (en cm)
 int Haut1 = 154;   // Hauteur du capteur dans la citerne
 
 long larg = 200; // Largeur en cm
