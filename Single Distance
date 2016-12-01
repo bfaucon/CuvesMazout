@@ -1,0 +1,121 @@
+/*
+** Example Arduino sketch for SainSmart I2C LCD Screen 16x4
+** based on https://bitbucket.org/celem/sainsmart-i2c-lcd/src/3adf8e0d2443/sainlcdtest.ino
+** by
+** Edward Comer
+** LICENSE: GNU General Public License, version 3 (GPL-3.0)
+　
+** This example uses F Malpartida's NewLiquidCrystal library. Obtain from:
+** https://bitbucket.org/fmalpartida/new-liquidcrystal 
+　
+** Modified Ã¢â‚¬â€œ Ian Brennan ianbren at hotmail.com 23-10-2012 to support Tutorial posted to Arduino.cc
+　
+** Written for and tested with Arduino 1.0
+**
+** NOTE: Tested on Arduino Uno whose I2C pins are A4==SDA, A5==SCL
+　
+*/
+
+#include <Wire.h>
+#include <LCD.h>
+#include <LiquidCrystal_I2C.h>
+　　　
+//distance1 sensor
+#define trigPin1 10
+#define echoPin1 9
+
+int maximumRange = 400; // distance1 Maximale acceptée (en cm)
+int minimumRange = 0;   // distance1 Minimale acceptée (en cm)
+int Haut1 = 154;   // Hauteur du capteur dans la citerne
+
+long larg = 200; // Largeur en cm
+long prof = 200; // Profondeur en cm
+long hauteur = 154; // Hauteur de la cuve
+ 　
+long duration1, distance1; // Durée utilisé pour calculer la distance1
+long h1, h2, h3;
+long vol1;
+　
+　
+//LCD
+#define I2C_ADDR    0x27 // <<----- Add your address here.  Find it from I2C Scanner
+#define BACKLIGHT_PIN     3
+#define En_pin  2
+#define Rw_pin  1
+#define Rs_pin  0
+#define D4_pin  4
+#define D5_pin  5
+#define D6_pin  6
+#define D7_pin  7
+　
+int n = 1;
+
+LiquidCrystal_I2C  lcd(I2C_ADDR,En_pin,Rw_pin,Rs_pin,D4_pin,D5_pin,D6_pin,D7_pin);
+　
+void setup()
+{
+   Serial.begin(9600);
+   pinMode(trigPin1, OUTPUT);  //The transmit pin of the ultrasonic sensor
+   pinMode(echoPin1, INPUT);   //The receive pin of the ultrasonic sensor
+   pinMode(LEDPin, OUTPUT);   //The LED of the Arduinolcd.begin (16,2); //  <<----- My LCD was 16x2
+   lcd.begin (16,2); //  <<----- My LCD was 16x2
+    
+   // Switch on the backlight
+   lcd.setBacklightPin(BACKLIGHT_PIN,POSITIVE);
+   lcd.setBacklight(HIGH);
+   lcd.home (); // go home 
+
+   lcd.print("www.one2care.be ");  
+   lcd.setCursor (0,1);
+   lcd.print("   Fuel level   "); 
+}
+　
+void loop()
+{
+   // Sonde 1
+   // Envoi une impulsion de 10 micro seconde sur la broche "trigger" 
+   digitalWrite(trigPin1, LOW); 
+   delayMicroseconds(2); 
+　
+   digitalWrite(trigPin1, HIGH);
+   delayMicroseconds(10); 
+   digitalWrite(trigPin1, LOW);
+  
+   // Attend que la broche Echo passe au niveau HAUT 
+   // retourne la durée
+   duration1 = pulseIn(echoPin1, HIGH);
+   //Serial.println("duration1");
+   //Serial.println(duration1);
+   //Calculer la distance1 (en cm, basÃ© sur la vitesse du son).
+   distance1 = duration1/58.2;
+   
+  
+   // Si la distance1 mesurée est HORS des valeurs acceptables
+   lcd.clear();
+   if (distance1 >= maximumRange || distance1 <= minimumRange)
+   {
+      /* Envoyer une valeur négative sur la liaison série.
+      Activer la LED pour indiquer que l'erreur */    
+      lcd.setCursor(0,0);
+      lcd.print(" STEP AWAY!!!");
+   }
+   else 
+   {
+      /* Envoyer la distance1 vers l'ordinateur via liaison série.
+      Eteindre la LED pour indiquer une lecture correcte. */
+      lcd.setCursor(0,0);
+      lcd.print("C:");
+      h1 = (Haut - distance);
+      lcd.print(h1);
+      lcd.print("cm");
+      lcd.print(" ");
+      vol1 = h1 * larg * prof;
+      lcd.print(vol1);
+      lcd.print("L");
+   }
+  
+ //Attendre 50ms avant d'effectuer la lecture suivante.
+ delay(500);
+  
+}
+　
